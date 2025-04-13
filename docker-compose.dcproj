@@ -15,5 +15,6 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="tests\Ambev.DeveloperEvaluation.Unit\Domain\Validation\ProductValidatorTests.cs" />
   </ItemGroup>
 </Project>
