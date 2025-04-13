@@ -63,7 +63,13 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// Indicates the most recent modification date of the product details.
         /// </summary>
         public DateTime? UpdatedAt { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the list of cart products associated with this product.
+        /// Represents the relationship between the product and carts.
+        /// </summary>
+        public List<CartItem> CartItems { get; set; } = null!;
+
 
         /// <summary>
         /// Validates the product entity using the ProductValidator rules.
