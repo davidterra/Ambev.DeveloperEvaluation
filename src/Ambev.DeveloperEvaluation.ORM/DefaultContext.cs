@@ -8,7 +8,7 @@ namespace Ambev.DeveloperEvaluation.ORM;
 
 public class DefaultContext : DbContext
 {
-    public DbSet<User> Users { get; set; }
+    public DbSet<User> Users { get; set; }    
 
     public DefaultContext(DbContextOptions<DefaultContext> options) : base(options)
     {
@@ -19,6 +19,22 @@ public class DefaultContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
     }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var entry = ChangeTracker.Entries()
+            .FirstOrDefault(entry => entry.Entity.GetType()
+                .GetProperty("CreatedAt") != null
+                    && entry.State == EntityState.Modified);
+
+        if (entry != null)
+        {
+            entry.Property("CreatedAt").IsModified = false;
+        }
+
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
 }
 public class YourDbContextFactory : IDesignTimeDbContextFactory<DefaultContext>
 {
@@ -34,7 +50,7 @@ public class YourDbContextFactory : IDesignTimeDbContextFactory<DefaultContext>
 
         builder.UseNpgsql(
                connectionString,
-               b => b.MigrationsAssembly("Ambev.DeveloperEvaluation.WebApi")
+               b => b.MigrationsAssembly("Ambev.DeveloperEvaluation.ORM")
         );
 
         return new DefaultContext(builder.Options);

@@ -2,7 +2,7 @@ using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using Bogus;
 
-namespace Ambev.DeveloperEvaluation.Unit.Domain;
+namespace Ambev.DeveloperEvaluation.Unit.Application.TestData.Users;
 
 /// <summary>
 /// Provides methods for generating test data using the Bogus library.
@@ -22,12 +22,34 @@ public static class CreateUserHandlerTestData
     /// - Role (Customer or Admin)
     /// </summary>
     private static readonly Faker<CreateUserCommand> createUserHandlerFaker = new Faker<CreateUserCommand>()
-        .RuleFor(u => u.Username, f => f.Internet.UserName())
-        .RuleFor(u => u.Password, f => $"Test@{f.Random.Number(100, 999)}")
-        .RuleFor(u => u.Email, f => f.Internet.Email())
-        .RuleFor(u => u.Phone, f => $"+55{f.Random.Number(11, 99)}{f.Random.Number(100000000, 999999999)}")
-        .RuleFor(u => u.Status, f => f.PickRandom(UserStatus.Active, UserStatus.Suspended))
-        .RuleFor(u => u.Role, f => f.PickRandom(UserRole.Customer, UserRole.Admin));
+    .RuleFor(u => u.Username, f => f.Internet.UserName())
+    .RuleFor(u => u.Password, f => $"Test@{f.Random.Number(100, 999)}")
+    .RuleFor(u => u.Email, f => f.Internet.Email())
+    .RuleFor(u => u.Phone, f => $"+55{f.Random.Number(11, 99)}{f.Random.Number(100000000, 999999999)}")
+    .RuleFor(u => u.Status, f => f.PickRandom(UserStatus.Active, UserStatus.Suspended))
+    .RuleFor(u => u.Role, f => f.PickRandom(UserRole.Customer, UserRole.Admin))
+    .RuleFor(u => u.Name, f => new CreateUserNameCommand
+    {
+        FirstName = f.Name.FirstName(),
+        LastName = f.Name.LastName()
+    })
+    .RuleFor(u => u.Address, f => new CreateUserAddressCommand
+    {
+        Street = f.Address.StreetName(),
+        Number = f.Random.Number(1, 9999).ToString(),
+        City = f.Address.City(),
+        State = f.Address.StateAbbr(),
+        ZipCode = f.Address.ZipCode("#####-###"),
+        GeoLocation = new CreateUserGeoLocationCommand
+        {
+            Latitude = f.Address.Latitude().ToString(),
+            Longitude = f.Address.Longitude().ToString()
+        }
+    });
+
+
+
+
 
     /// <summary>
     /// Generates a valid User entity with randomized data.

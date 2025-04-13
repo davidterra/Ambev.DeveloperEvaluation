@@ -3,12 +3,13 @@ using FluentValidation;
 namespace Ambev.DeveloperEvaluation.Application.Users.DeleteUser;
 
 /// <summary>
-/// Validator for DeleteUserCommand
+/// Validator for DeleteUserCommand, ensuring that the command contains valid data before processing.
 /// </summary>
 public class DeleteUserValidator : AbstractValidator<DeleteUserCommand>
 {
     /// <summary>
-    /// Initializes validation rules for DeleteUserCommand
+    /// Initializes validation rules for DeleteUserCommand.
+    /// Ensures that the Id property is not empty or null.
     /// </summary>
     public DeleteUserValidator()
     {
