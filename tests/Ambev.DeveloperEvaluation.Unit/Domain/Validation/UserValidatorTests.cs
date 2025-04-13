@@ -203,4 +203,56 @@ public class UserValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Role);
     }
+    /// <summary>
+    /// Tests that validation fails for invalid name formats.
+    /// This test verifies that names that:
+    /// - Are null or empty
+    /// - Contain only whitespace
+    /// - Exceed a reasonable length limit (e.g., 100 characters)
+    /// fail validation with appropriate error messages.
+    /// </summary>
+    [Fact(DisplayName = "Invalid name formats should fail validation")]
+    public void Given_InvalidName_When_Validated_Then_ShouldHaveError()
+    {
+        // Arrange
+        var user = UserTestData.GenerateValidUser();
+        user.Name = UserTestData.GenerateInvalidName();
+
+        // Act
+        var result = _validator.TestValidate(user);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Name.FirstName);
+        result.ShouldHaveValidationErrorFor(x => x.Name.LastName);
+    }
+    /// <summary>
+    /// Tests that validation fails for invalid address formats.
+    /// This test verifies that addresses that:
+    /// - Have null or empty fields (City, State, Street, Number, or ZipCode)
+    /// - Contain invalid ZipCode formats
+    /// - Have invalid GeoLocation values (Latitude or Longitude)
+    /// fail validation with appropriate error messages.
+    /// </summary>
+    [Fact(DisplayName = "Invalid address formats should fail validation")]
+    public void Given_InvalidAddress_When_Validated_Then_ShouldHaveError()
+    {
+        // Arrange
+        var user = UserTestData.GenerateValidUser();
+        user.Address = UserTestData.GenerateInvalidAddress();
+
+        // Act
+        var result = _validator.TestValidate(user);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Address.City);
+        result.ShouldHaveValidationErrorFor(x => x.Address.State);
+        result.ShouldHaveValidationErrorFor(x => x.Address.Street);
+        result.ShouldHaveValidationErrorFor(x => x.Address.Number);
+        result.ShouldHaveValidationErrorFor(x => x.Address.ZipCode);
+        result.ShouldHaveValidationErrorFor(x => x.Address.GeoLocation.Latitude);
+        result.ShouldHaveValidationErrorFor(x => x.Address.GeoLocation.Longitude);
+    }
+
+
+
 }

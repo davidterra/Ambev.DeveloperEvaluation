@@ -1,5 +1,6 @@
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 using Bogus;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData;
@@ -27,7 +28,21 @@ public static class UserTestData
         .RuleFor(u => u.Email, f => f.Internet.Email())
         .RuleFor(u => u.Phone, f => $"+55{f.Random.Number(11, 99)}{f.Random.Number(100000000, 999999999)}")
         .RuleFor(u => u.Status, f => f.PickRandom(UserStatus.Active, UserStatus.Suspended))
-        .RuleFor(u => u.Role, f => f.PickRandom(UserRole.Customer, UserRole.Admin));
+        .RuleFor(u => u.Role, f => f.PickRandom(UserRole.Customer, UserRole.Admin))
+        .RuleFor(u => u.Name, f => new PersonNameValue(f.Name.FirstName(), f.Name.LastName()))
+        .RuleFor(u => u.Address, f => new AddressValue
+        (
+            f.Address.City(),
+            f.Address.StateAbbr(),
+            f.Address.StreetName(),
+            f.Random.Number(1, 9999).ToString(),
+            f.Address.ZipCode("#####-###"),
+            new GeoLocationValue
+            (
+                f.Address.Latitude().ToString(),
+                f.Address.Longitude().ToString())
+            )
+        );
 
     /// <summary>
     /// Generates a valid User entity with randomized data.
@@ -150,4 +165,17 @@ public static class UserTestData
     {
         return new Faker().Random.String2(51);
     }
+
+    public static PersonNameValue GenerateInvalidName()
+    {
+        var rnd = new Faker().Random.String2(100);
+        return new(rnd, rnd);
+    }
+
+    public static AddressValue GenerateInvalidAddress()
+    {
+        var rnd = new Faker().Random.String2(101);
+        return new(rnd, rnd, rnd, rnd, rnd, new GeoLocationValue(rnd, rnd));
+    }
+
 }

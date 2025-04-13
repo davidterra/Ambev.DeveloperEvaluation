@@ -3,19 +3,20 @@ using MediatR;
 namespace Ambev.DeveloperEvaluation.Application.Users.DeleteUser;
 
 /// <summary>
-/// Command for deleting a user
+/// Command for deleting a user.
+/// This command encapsulates the data required to perform a user deletion operation.
 /// </summary>
 public record DeleteUserCommand : IRequest<DeleteUserResponse>
 {
     /// <summary>
-    /// The unique identifier of the user to delete
+    /// Gets the unique identifier of the user to delete.
     /// </summary>
     public Guid Id { get; }
 
     /// <summary>
-    /// Initializes a new instance of DeleteUserCommand
+    /// Initializes a new instance of the <see cref="DeleteUserCommand"/> class.
     /// </summary>
-    /// <param name="id">The ID of the user to delete</param>
+    /// <param name="id">The unique identifier of the user to delete.</param>
     public DeleteUserCommand(Guid id)
     {
         Id = id;
