@@ -154,6 +154,11 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             TotalAmount = UnitPrice.Subtract(UnitPrice.Multiply(discountPercentage / 100)).Multiply(Quantity);
         }
 
+        public void Subtotal()
+        {            
+            TotalAmount = UnitPrice.Subtract(UnitPrice.Multiply(DiscountPercent.Value / 100)).Multiply(Quantity);
+        }
+        
         public bool IsCancelled()
         {
             return CanceledAt != null;

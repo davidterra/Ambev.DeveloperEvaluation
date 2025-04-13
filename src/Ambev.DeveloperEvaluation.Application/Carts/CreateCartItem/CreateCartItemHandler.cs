@@ -178,6 +178,7 @@ public class CreateCartItemHandler : IRequestHandler<CreateCartItemCommand, Crea
         var cartProduct = _mapper.Map<CartItem>(command.Product);
         cartProduct.UnitPrice = product.Price;
         _discountService.ApplyDiscount(cartProduct);
+        cartProduct.Subtotal();
 
         return new Cart
         {
@@ -201,7 +202,7 @@ public class CreateCartItemHandler : IRequestHandler<CreateCartItemCommand, Crea
             throw new ValidationException(new[] { new ValidationFailure("ProductId", $"Product with ID {product.Id} already exists in the cart") { ErrorCode = "Invalid input data" } });
         }
 
-        var cartProduct = new CartItem
+        var cartItem = new CartItem
         {
             CartId = cart.Id,
             ProductId = product.Id,
@@ -209,8 +210,8 @@ public class CreateCartItemHandler : IRequestHandler<CreateCartItemCommand, Crea
             UnitPrice = product.Price
         };
 
-        _discountService.ApplyDiscount(cartProduct);
-
-        return cartProduct;
+        _discountService.ApplyDiscount(cartItem);
+        cartItem.Subtotal();
+        return cartItem;
     }
 }

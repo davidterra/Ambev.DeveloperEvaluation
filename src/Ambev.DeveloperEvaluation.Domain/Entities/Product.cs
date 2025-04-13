@@ -70,6 +70,11 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// </summary>
         public List<CartItem> CartItems { get; set; } = null!;
 
+        /// <summary>
+        /// Gets or sets the list of sale items associated with this sale.
+        /// Represents the relationship between the sale and sales.
+        /// </summary>
+        public List<SaleItem> SaleItems { get; set; } = null!;
 
         /// <summary>
         /// Validates the product entity using the ProductValidator rules.

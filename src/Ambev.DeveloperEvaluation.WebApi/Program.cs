@@ -58,8 +58,10 @@ public class Program
 
             builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-            var app = builder.Build();
+            var app = builder.Build();            
             app.UseMiddleware<ValidationExceptionMiddleware>();
+            app.UseMiddleware<ResourceNotFoundExceptionMiddleware>();
+            app.UseMiddleware<UnauthorizedAccessExceptionMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {
