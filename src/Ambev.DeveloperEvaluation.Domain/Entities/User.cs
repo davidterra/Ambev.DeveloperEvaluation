@@ -65,7 +65,7 @@ public class User : BaseEntity, IUser
     public AddressValue Address { get; set; } = null!;
 
     public List<Cart> Carts { get; set; } = null!;
-    //public List<Sale> Sales { get; set; } = null!;
+    public List<Sale> Sales { get; set; } = null!;
 
 
     /// <summary>

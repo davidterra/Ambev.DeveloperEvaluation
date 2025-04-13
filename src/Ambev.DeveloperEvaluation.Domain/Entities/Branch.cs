@@ -28,6 +28,10 @@
         /// Null if the branch has not been updated.
         /// </summary>
         public DateTime? UpdatedAt { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the collection of carts associated with the branch.
+        /// </summary>        
+        public List<Sale> Sales { get; set; } = null!;
     }
 }
